@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
+import { Contract } from './entities/contract.entity';
 
 @Injectable()
 export class ContractService {
-  create(createContractDto: CreateContractDto) {
-    return 'This action adds a new contract';
+  constructor(
+    @InjectRepository(Contract)
+    private readonly contractRepo: Repository<Contract>,
+  ) {}
+
+  async create(createContractDto: CreateContractDto) {
+    return await this.contractRepo.create(createContractDto);
   }
 
-  findAll() {
-    return `This action returns all contract`;
+  async findAll(): Promise<Contract[]> {
+    try {
+      return await this.contractRepo.find();
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contract`;
+  async findOne(id: number) {
+    try {
+      return await this.contractRepo.findOneOrFail({ where: { id: id } });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  update(id: number, updateContractDto: UpdateContractDto) {
-    return `This action updates a #${id} contract`;
+  async update(id: number, updateContractDto: UpdateContractDto) {
+    try {
+      await this.contractRepo.update(id, updateContractDto);
+      return { updated: true };
+    } catch (error) {
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contract`;
+  async remove(id: number) {
+    try {
+      await this.contractRepo.delete(id);
+      return { deleted: true };
+    } catch (error) {
+      throw error;
+    }
   }
 }

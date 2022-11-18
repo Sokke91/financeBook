@@ -8,7 +8,7 @@ import { ContractModule } from './contract/contract.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'financeBook',
+      database: 'financeBookDB',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
