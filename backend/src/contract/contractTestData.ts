@@ -14,7 +14,7 @@ oneContract.intervallValue = 1;
 oneContract.createdAt = new Date('2022-11-17');
 oneContract.updatedAt = new Date('2022-12-18');
 
-const contract2 = oneContract;
+const contract2 = { ...oneContract };
 contract2.id = 2;
 
 const contractArray: Contract[] = [oneContract, contract2];
